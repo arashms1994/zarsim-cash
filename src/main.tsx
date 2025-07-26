@@ -19,7 +19,7 @@ const cacheRtl = createCache({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryProvider>
-      <BrowserRouter basename="/SitePages/CashFrom.aspx">
+      <BrowserRouter basename="/SitePages/CashForm.aspx">
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
