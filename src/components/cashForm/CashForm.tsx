@@ -3,37 +3,34 @@ import FileUploader from "../file-uploader/FileUploader";
 
 const CashForm = () => {
   return (
-    <Stack justifyContent={"center"} alignItems={"center"}>
+    <Stack justifyContent={"center"} alignItems={"center"} gap={"12px"}>
       <form style={{ width: "350px" }}>
         <Stack
           direction={"row"}
           justifyContent={"space-between"}
           width={"100%"}
-          padding={"8px"}
         >
           <label>
             <Typography variant="subtitle1" gutterBottom>
-              مبلغ واریز(ريال)
+              مبلغ واریز(ريال):
             </Typography>
           </label>
-          <TextField type="text" id="count" label="مبلغ" variant="outlined" />
+          <TextField type="text" id="count" variant="outlined" />
         </Stack>
 
         <Stack
           direction={"row"}
           justifyContent={"space-between"}
           width={"100%"}
-          padding={"8px"}
         >
           <label>
             <Typography variant="subtitle1" gutterBottom>
-              تاریخ واریز{" "}
+              تاریخ واریز:
             </Typography>
           </label>
           <TextField
             type="text"
             id="due_date"
-            label="تاریخ واریز"
             variant="outlined"
           />
         </Stack>
@@ -42,17 +39,15 @@ const CashForm = () => {
           direction={"row"}
           justifyContent={"space-between"}
           width={"100%"}
-          padding={"8px"}
         >
           <label>
             <Typography variant="subtitle1" gutterBottom>
-              شماره مرجع{" "}
+              شماره مرجع:
             </Typography>
           </label>
           <TextField
             type="text"
             id="reference_number"
-            label="شماره مرجع"
             variant="outlined"
           />
         </Stack>
