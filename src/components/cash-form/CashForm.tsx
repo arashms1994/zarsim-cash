@@ -1,45 +1,108 @@
-import { useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import FileUploader from "../file-uploader/FileUploader";
 import PersianDatePicker from "../persian-date-picker/PersianDatePicker";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { toast } from "sonner";
+import { formSchema } from "@/utils/validation";
 
 const CashForm = () => {
-  const [dueDate, setDueDate] = useState<string>("");
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      count: "",
+      reference_number: "",
+      due_date: "",
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    toast("واریز ثبت شد", {
+      description: (
+        <pre className="mt-2 w-[320px] rounded-md bg-black text-white p-4 text-xs">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      ),
+    });
+  };
 
   return (
     <div className="flex justify-center items-center gap-3 py-6">
-      <form className="w-[350px] space-y-4">
-        <div className="grid w-full items-center gap-2">
-          <Label htmlFor="count">مبلغ واریز (ریال):</Label>
-          <Input type="text" id="count" placeholder="مبلغ" />
-        </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-[400px] space-y-4"
+        >
+          <FormField
+            control={form.control}
+            name="count"
+            render={({ field }) => (
+              <FormItem className="flex justify-between items-center w-full">
+                <FormLabel>مبلغ واریز (ریال):</FormLabel>
+                <FormControl style={{ width: "230px" }}>
+                  <Input placeholder="مبلغ" {...field} width={230} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className="grid w-full items-center gap-2">
-          <Label htmlFor="due_date">تاریخ واریز:</Label>
-          <PersianDatePicker value={dueDate} onChange={setDueDate} />
-        </div>
+          <FormField
+            control={form.control}
+            name="due_date"
+            render={({ field }) => (
+              <FormItem className="flex justify-between items-center w-full">
+                <FormLabel>تاریخ واریز:</FormLabel>
+                <FormControl>
+                  <PersianDatePicker
+                    value={field.value}
+                    onChange={(val) => field.onChange(val)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className="grid w-full items-center gap-2">
-          <Label htmlFor="reference_number">شماره مرجع:</Label>
-          <span>سلام سلاااااااااااااااااااااااااااااااااااااااااااااااااااااام همپی سلااااااااااااام</span>
-          <Input type="text" id="reference_number" placeholder="شماره مرجع" />
-        </div>
+          <FormField
+            control={form.control}
+            name="reference_number"
+            render={({ field }) => (
+              <FormItem className="flex justify-between items-center w-full">
+                <FormLabel>شماره مرجع:</FormLabel>
+                <FormControl style={{ width: "230px" }}>
+                  <Input placeholder="شماره مرجع" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className="grid w-full items-center gap-2">
-          <Label>آپلود رسید واریز:</Label>
-          <FileUploader orderNumber="52555" subFolder="55555" />
-        </div>
+          <div className="flex justify-between items-center w-full">
+            <FormLabel>آپلود رسید واریز:</FormLabel>
+            <FileUploader orderNumber="52555" subFolder="55555" />
+          </div>
 
-        <div className="flex justify-center pt-2">
-          <button
-            type="submit"
-            className="bg-[#0d8957] hover:bg-[#0b734a] text-white font-semibold px-6 py-2 rounded"
-          >
-            ثبت واریز
-          </button>
-        </div>
-      </form>
+          <div className="flex justify-center pt-2 w-full">
+            <Button
+              type="submit"
+              className="bg-green-600 w-40 hover:bg-green-800 text-white transition-all duration-300"
+            >
+              ثبت فیش واریز
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
