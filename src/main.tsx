@@ -8,7 +8,7 @@ import QueryProvider from "./providers/QueryProvider.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryProvider>
-      <BrowserRouter basename="/SitePages/CashForm.aspx">
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </QueryProvider>
