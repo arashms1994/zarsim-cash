@@ -19,7 +19,7 @@ const PersianDatePicker: React.FC<IPersianDatePickerProps> = ({
         render={
           <input
             placeholder="تاریخ را انتخاب کنید"
-            className="w-full h-full px-2 text-right outline-none text-gray-700"
+            className="w-full h-full px-2 text-right outline-none text-gray-700 bg-transparent"
           />
         }
         onChange={(date) => {
