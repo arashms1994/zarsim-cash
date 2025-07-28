@@ -15,6 +15,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { formSchema } from "@/utils/validation";
+import { useUser } from "@/api/getData";
 
 const CashForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -36,8 +37,14 @@ const CashForm = () => {
     });
   };
 
+  const user = useUser();
+  console.log(user);
+
   return (
-    <div className="flex justify-center items-center gap-3 py-6">
+    <div className="flex flex-col justify-center items-center gap-3 py-6">
+      <span className="text-2xl text-center text-black">
+        فرم ثبت واریز نقدی
+      </span>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
