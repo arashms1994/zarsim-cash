@@ -10,3 +10,13 @@ export interface IPersianDatePickerProps {
   value: string | Date | DateObject | null;
   onChange: (date: string) => void;
 }
+
+export interface ICashListItem {
+  ID: number;
+  Title: string;
+  count: string;
+  due_date: string;
+  reference_number: string;
+  status: string;
+  customer_GUID: string;
+}
