@@ -42,14 +42,14 @@ const CashForm = () => {
 
   return (
     <div className="flex flex-col justify-center items-center gap-3 py-6">
-      <span className="text-2xl text-center text-black">
-        فرم ثبت واریز نقدی
-      </span>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[400px] space-y-4"
+          className="w-[450px] space-y-4 border-2 rounded inset-shadow-xs p-6"
         >
+          <span className="text-2xl text-center text-black">
+            فرم ثبت واریز نقدی
+          </span>
           <FormField
             control={form.control}
             name="count"
