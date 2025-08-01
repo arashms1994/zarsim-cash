@@ -1,10 +1,10 @@
 import "./App.css";
-import CashForm from "./components/cash-form/CashForm";
+import CashPage from "./components/cash-page/CashPage";
 
 function App() {
   return (
     <>
-        <CashForm />
+      <CashPage />
     </>
   );
 }
