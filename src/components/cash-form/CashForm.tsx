@@ -45,7 +45,7 @@ const CashForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[450px] space-y-4 border-2 rounded inset-shadow-xs p-6"
+          className="w-[450px] space-y-4 border-2 rounded inset-shadow-xs p-6 bg-slate-50"
         >
           <span className="text-2xl text-center text-black">
             فرم ثبت واریز نقدی
