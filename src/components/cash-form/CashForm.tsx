@@ -41,11 +41,11 @@ const CashForm = () => {
   console.log(user);
 
   return (
-    <div className="flex flex-col justify-center items-center gap-3 py-6">
+    <div className="flex flex-col justify-center items-center gap-3">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[450px] space-y-4 border-2 rounded inset-shadow-xs p-6 bg-slate-50"
+          className="w-[450px] space-y-4 rounded-xl inset-shadow-xs p-6 bg-slate-50"
         >
           <span className="text-2xl text-center text-black">
             فرم ثبت واریز نقدی

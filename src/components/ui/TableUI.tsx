@@ -56,7 +56,7 @@ const invoices = [
 
 export function TableUI() {
   return (
-    <Table>
+    <Table className="bg-slate-50">
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
