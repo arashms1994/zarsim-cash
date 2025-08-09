@@ -1,14 +1,21 @@
 import { getDigest } from "@/utils/getDigest";
+import { toast } from "sonner";
 import { BASE_URL } from "./base";
 
-export async function addCashReceipt(GUID: string, state: any): Promise<void> {
+export async function addCashReceipt(data: {
+  Title: string;
+  count: string;
+  reference_number: string;
+  due_date: string;
+  status: string;
+}) {
   const listName = "Cash_List";
-  const itemType = "SP.Data.Cash_ListListItem";
-  const digest = await getDigest();
+  const itemType = "SP.Data.Cash_x005f_ListListItem";
 
-  const response = await fetch(
-    `${BASE_URL}/_api/web/lists/getbytitle('${listName}')/items`,
-    {
+  try {
+    const digest = await getDigest();
+
+    await fetch(`${BASE_URL}/_api/web/lists/getbytitle('${listName}')/items`, {
       method: "POST",
       headers: {
         Accept: "application/json;odata=verbose",
@@ -17,22 +24,85 @@ export async function addCashReceipt(GUID: string, state: any): Promise<void> {
       },
       body: JSON.stringify({
         __metadata: { type: itemType },
-        Title: String(GUID),
-        LC_Number: String(state.LCNumber),
-        Total_Price: String(state.LCTotalPrice),
-        Settlement_Period: String(state.LCSettlementDate),
-        Origin_Openning_Date: String(state.LCOriginOpenningDate),
-        Opening_Date: String(state.LCOpenningDate),
-        Communication_Date: String(state.LCCommunicationDate),
+        ...data,
       }),
+    });
+
+    toast.success("اطلاعات با موفقیت ذخیره شد.");
+  } catch (err) {
+    if (err instanceof Error) {
+      toast.error(`خطا: ${err.message}`);
+      console.error("خطا:", err.message);
+    } else {
+      toast.error("خطای ناشناس رخ داد");
+      console.error("خطای ناشناس:", err);
+    }
+  }
+}
+
+export async function updateCashReceipt(
+  data: {
+    Title: string;
+    count: string;
+    reference_number: string;
+    due_date: string;
+    status: string;
+  },
+  ID: number
+) {
+  const listName = "Cash_List";
+  const itemType = "SP.Data.Cash_x005f_ListListItem";
+
+  try {
+    const digest = await getDigest();
+
+    await fetch(
+      `${BASE_URL}/_api/web/lists/getbytitle('${listName}')/items(${ID})`,
+      {
+        method: "POST", // ✅ MUST be POST
+        headers: {
+          Accept: "application/json;odata=verbose",
+          "Content-Type": "application/json;odata=verbose",
+          "X-RequestDigest": digest,
+          "X-HTTP-Method": "MERGE", // ✅ Tells SharePoint this is an update
+          "IF-MATCH": "*", // ✅ Overwrite any ETag
+        },
+        body: JSON.stringify({
+          __metadata: { type: itemType },
+          ...data,
+        }),
+      }
+    );
+
+    toast.success("اطلاعات با موفقیت ذخیره شد.");
+  } catch (err) {
+    if (err instanceof Error) {
+      toast.error(`خطا: ${err.message}`);
+      console.error("خطا:", err.message);
+    } else {
+      toast.error("خطای ناشناس رخ داد");
+      console.error("خطای ناشناس:", err);
+    }
+  }
+}
+
+export async function deleteCashReceipt(ID: number) {
+  const digest = await getDigest();
+  const listName = "Cash_List";
+
+  const res = await fetch(
+    `${BASE_URL}/_api/web/lists/getbytitle('${listName}')/items(${ID})`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json;odata=verbose",
+        "Content-Type": "application/json;odata=verbose",
+        "X-RequestDigest": digest,
+        "X-HTTP-Method": "DELETE",
+        "IF-MATCH": "*",
+      },
     }
   );
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error("خطا در ثبت آیتم: " + error);
-  }
-
-  const data = await response.json();
-  console.log("آیتم با موفقیت ثبت شد:", data);
+  if (!res.ok) throw new Error("حذف با خطا مواجه شد");
 }

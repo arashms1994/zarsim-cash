@@ -1,9 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { BASE_URL } from "./base";
 import type { ICashListItem } from "@/utils/type";
+import { BASE_URL } from "./base";
 
-declare const _spPageContextInfo: { webAbsoluteUrl: string };
+declare const _spPageContextInfo: {
+  webAbsoluteUrl: string;
+};
 
+/**
+ * Get current logged-in SharePoint user
+ */
 export async function getCurrentUser(): Promise<string> {
   const response = await fetch(
     `${_spPageContextInfo.webAbsoluteUrl}/_api/web/currentuser`,
@@ -18,11 +23,12 @@ export async function getCurrentUser(): Promise<string> {
   }
 
   const data = await response.json();
-  const rawLoginName = data.d.LoginName;
-
-  return rawLoginName;
+  return data.d.LoginName;
 }
 
+/**
+ * Fetch all items from Cash_List (paginated)
+ */
 export async function getAllCashListItems(): Promise<ICashListItem[]> {
   const listTitle = "Cash_List";
   let items: ICashListItem[] = [];
@@ -32,8 +38,7 @@ export async function getAllCashListItems(): Promise<ICashListItem[]> {
     | null = `${BASE_URL}/_api/web/lists/getbytitle('${listTitle}')/items?$top=100&$orderby=ID desc`;
 
   while (nextUrl) {
-    const res: Response = await fetch(nextUrl, {
-      method: "GET",
+    const res = await fetch(nextUrl, {
       headers: {
         Accept: "application/json;odata=verbose",
       },
@@ -46,8 +51,11 @@ export async function getAllCashListItems(): Promise<ICashListItem[]> {
 
     const json: { d: { results: ICashListItem[]; __next?: string } } =
       await res.json();
-    const results = json?.d?.results;
-    if (!results) throw new Error("ساختار داده‌ی برگشتی نامعتبر است");
+
+    const results = json.d?.results;
+    if (!Array.isArray(results)) {
+      throw new Error("ساختار داده‌ی برگشتی نامعتبر است");
+    }
 
     items = [...items, ...results];
     nextUrl = json.d.__next ?? null;
@@ -56,16 +64,23 @@ export async function getAllCashListItems(): Promise<ICashListItem[]> {
   return items;
 }
 
+/**
+ * React Query hook to get current SharePoint user
+ */
 export function useUser() {
-  return useQuery<any, Error>({
-    queryKey: ["customer"],
-    queryFn: () => getCurrentUser(),
+  return useQuery<string, Error>({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
   });
 }
 
+/**
+ * React Query hook to get all Cash List items
+ */
 export function useCashListItems() {
   return useQuery<ICashListItem[], Error>({
     queryKey: ["cashListItems"],
-    queryFn: () => getAllCashListItems(),
+    queryFn: getAllCashListItems,
+    staleTime: 1000 * 60 * 5, // Optional: 5 minutes cache
   });
 }

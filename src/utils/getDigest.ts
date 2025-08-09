@@ -1,4 +1,4 @@
-import { BASE_URL } from "../api/base";
+import { BASE_URL } from "@/api/base";
 
 export async function getDigest(): Promise<string> {
   return fetch(`${BASE_URL}/_api/contextinfo`, {
