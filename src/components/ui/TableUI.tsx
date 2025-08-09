@@ -12,60 +12,16 @@ import {
 import { useFormContext } from "react-hook-form";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "./button";
-import { DialogClose } from "@radix-ui/react-dialog";
 import { deleteCashReceipt } from "@/api/addData";
+import { Edit2, Trash2 } from "lucide-react";
 // import { deleteCashReceipt } from "@/api/addData";
-
-// const invoices = [
-//   {
-//     invoice: "INV001",
-//     paymentStatus: "Paid",
-//     totalAmount: "$250.00",
-//     paymentMethod: "Credit Card",
-//   },
-//   {
-//     invoice: "INV002",
-//     paymentStatus: "Pending",
-//     totalAmount: "$150.00",
-//     paymentMethod: "PayPal",
-//   },
-//   {
-//     invoice: "INV003",
-//     paymentStatus: "Unpaid",
-//     totalAmount: "$350.00",
-//     paymentMethod: "Bank Transfer",
-//   },
-//   {
-//     invoice: "INV004",
-//     paymentStatus: "Paid",
-//     totalAmount: "$450.00",
-//     paymentMethod: "Credit Card",
-//   },
-//   {
-//     invoice: "INV005",
-//     paymentStatus: "Paid",
-//     totalAmount: "$550.00",
-//     paymentMethod: "PayPal",
-//   },
-//   {
-//     invoice: "INV006",
-//     paymentStatus: "Pending",
-//     totalAmount: "$200.00",
-//     paymentMethod: "Bank Transfer",
-//   },
-//   {
-//     invoice: "INV007",
-//     paymentStatus: "Unpaid",
-//     totalAmount: "$300.00",
-//     paymentMethod: "Credit Card",
-//   },
-// ];
 
 export function TableUI() {
   const form = useFormContext();
@@ -112,12 +68,12 @@ export function TableUI() {
                     }, 10);
                   }}
                 >
-                  ویرایش
+                  <Edit2 />
                 </button>
 
                 <DialogTrigger asChild>
                   <button className="hover:text-red-400 border-0 hover:bg-transparent ">
-                    حذف
+                    <Trash2 />
                   </button>
                 </DialogTrigger>
               </TableCell>
@@ -150,18 +106,7 @@ export function TableUI() {
             </TableRow>
           ))}
         </TableBody>
-
-        {/* <TableFooter>
-        <TableRow>
-          <TableCell colSpan={2} className="text-right">
-            جمع کل
-          </TableCell>
-          <TableCell colSpan={2} className="text-right">
-            $2,500.00
-          </TableCell>
-        </TableRow>
-      </TableFooter> */}
-      </Table>{" "}
+      </Table>
     </Dialog>
   );
 }

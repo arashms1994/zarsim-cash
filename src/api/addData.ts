@@ -59,13 +59,13 @@ export async function updateCashReceipt(
     await fetch(
       `${BASE_URL}/_api/web/lists/getbytitle('${listName}')/items(${ID})`,
       {
-        method: "POST", // ✅ MUST be POST
+        method: "POST",
         headers: {
           Accept: "application/json;odata=verbose",
           "Content-Type": "application/json;odata=verbose",
           "X-RequestDigest": digest,
-          "X-HTTP-Method": "MERGE", // ✅ Tells SharePoint this is an update
-          "IF-MATCH": "*", // ✅ Overwrite any ETag
+          "X-HTTP-Method": "MERGE",
+          "IF-MATCH": "*",
         },
         body: JSON.stringify({
           __metadata: { type: itemType },

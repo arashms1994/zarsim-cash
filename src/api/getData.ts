@@ -6,9 +6,6 @@ declare const _spPageContextInfo: {
   webAbsoluteUrl: string;
 };
 
-/**
- * Get current logged-in SharePoint user
- */
 export async function getCurrentUser(): Promise<string> {
   const response = await fetch(
     `${_spPageContextInfo.webAbsoluteUrl}/_api/web/currentuser`,
@@ -26,9 +23,6 @@ export async function getCurrentUser(): Promise<string> {
   return data.d.LoginName;
 }
 
-/**
- * Fetch all items from Cash_List (paginated)
- */
 export async function getAllCashListItems(): Promise<ICashListItem[]> {
   const listTitle = "Cash_List";
   let items: ICashListItem[] = [];
@@ -64,9 +58,6 @@ export async function getAllCashListItems(): Promise<ICashListItem[]> {
   return items;
 }
 
-/**
- * React Query hook to get current SharePoint user
- */
 export function useUser() {
   return useQuery<string, Error>({
     queryKey: ["currentUser"],
@@ -74,13 +65,10 @@ export function useUser() {
   });
 }
 
-/**
- * React Query hook to get all Cash List items
- */
 export function useCashListItems() {
   return useQuery<ICashListItem[], Error>({
     queryKey: ["cashListItems"],
     queryFn: getAllCashListItems,
-    staleTime: 1000 * 60 * 5, // Optional: 5 minutes cache
+    staleTime: 10000,
   });
 }
