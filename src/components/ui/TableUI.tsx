@@ -1,4 +1,4 @@
-import { useCashListItems } from "@/api/getData";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,8 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { useFormContext } from "react-hook-form";
 import {
   Dialog,
   DialogClose,
@@ -19,94 +17,99 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "./button";
-import { deleteCashReceipt } from "@/api/addData";
-import { Edit2, Trash2 } from "lucide-react";
-// import { deleteCashReceipt } from "@/api/addData";
+import { Trash2 } from "lucide-react";
+import type { ITableUIProps } from "@/utils/type";
+import { deleteCashReceipt } from "@/api/deleteData";
+// import { useToast } from "@/components/ui/use-toast";
 
-export function TableUI() {
-  const form = useFormContext();
+export function TableUI({ data }: ITableUIProps) {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  // const { toast } = useToast();
 
-  const { data } = useCashListItems();
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteCashReceipt(id);
+      // toast({
+      //   title: "موفقیت",
+      //   description: "آیتم با موفقیت حذف شد.",
+      // });
+    } catch (error) {
+      console.error(error);
+      // toast({
+      //   title: "خطا",
+      //   description: error instanceof Error ? error.message : "خطا در حذف آیتم",
+      //   variant: "destructive",
+      // });
+    }
+  };
 
-  console.log("getAllCashListItems", data);
   return (
     <Dialog>
       <Table className="bg-slate-50" dir="rtl">
-        <TableCaption>لیست واریزی های شما</TableCaption>
+        <TableCaption>لیست واریزی‌های شما</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="text-right">تاریخ</TableHead>
             <TableHead className="text-right">مبلغ</TableHead>
             <TableHead className="text-right">شماره مرجع</TableHead>
+            <TableHead className="text-right">شماره حساب</TableHead>
             <TableHead className="text-right">عملیات</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.map((invoice) => (
-            <TableRow key={invoice.Title}>
-              <TableCell className="text-right">{invoice.due_date}</TableCell>
-              <TableCell className="text-right">{invoice.count}</TableCell>
+          {data?.map((item) => (
+            <TableRow key={item.Title}>
+              <TableCell className="text-right">{item.due_date}</TableCell>
+              <TableCell className="text-right">{item.count}</TableCell>
               <TableCell className="text-right">
-                {invoice.reference_number}
+                {item.reference_number}
               </TableCell>
+              <TableCell className="text-right">{item.bank_account}</TableCell>
               <TableCell className="text-right flex gap-2">
-                <button
-                  className="hover:text-blue-400 border-0 hover:bg-transparent "
-                  onClick={(e) => {
-                    e.preventDefault();
-                    form.reset();
-                    setTimeout(() => {
-                      form.setValue("Title", invoice.Title);
-                      form.setValue("count", invoice.count);
-                      form.setValue(
-                        "reference_number",
-                        invoice.reference_number
-                      );
-                      form.setValue("due_date", invoice.due_date);
-                      form.setValue("ID", invoice.ID);
-                      form.setValue("isUpdating", true);
-                    }, 10);
-                  }}
-                >
-                  <Edit2 />
-                </button>
-
-                <DialogTrigger asChild>
-                  <button className="hover:text-red-400 border-0 hover:bg-transparent ">
+                <DialogTrigger asChild onClick={() => setSelectedId(item.ID)}>
+                  <button
+                    className="hover:text-red-400 border-0 hover:bg-transparent"
+                    aria-label={`حذف آیتم ${item.Title}`}
+                  >
                     <Trash2 />
                   </button>
                 </DialogTrigger>
               </TableCell>
-              <DialogContent className="sm:max-w-md rounded-xl p-6 text-right">
-                <DialogHeader className="space-y-4">
-                  <DialogTitle className="text-lg font-bold text-right p-3">
-                    آیا از انجام عملیات حذف اطمینان دارید؟
-                  </DialogTitle>
-
-                  <div className="flex justify-end gap-3 pt-4">
-                    <Button
-                      variant="destructive"
-                      className="min-w-[80px]"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteCashReceipt(invoice.ID);
-                      }}
-                    >
-                      بله
-                    </Button>
-
-                    <DialogClose asChild>
-                      <Button variant="secondary" className="min-w-[80px]">
-                        خیر
-                      </Button>
-                    </DialogClose>
-                  </div>
-                </DialogHeader>
-              </DialogContent>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      {selectedId && (
+        <DialogContent className="sm:max-w-md rounded-xl p-6 text-right">
+          <DialogHeader className="space-y-4">
+            <DialogTitle className="text-lg font-bold text-right p-3">
+              آیا از انجام عملیات حذف اطمینان دارید؟
+            </DialogTitle>
+            <div className="flex justify-end gap-3 pt-4">
+              <Button
+                variant="destructive"
+                className="min-w-[80px]"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  await handleDelete(selectedId);
+                  setSelectedId(null);
+                }}
+              >
+                بله
+              </Button>
+              <DialogClose asChild>
+                <Button
+                  variant="secondary"
+                  className="min-w-[80px]"
+                  onClick={() => setSelectedId(null)}
+                >
+                  خیر
+                </Button>
+              </DialogClose>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      )}
     </Dialog>
   );
 }

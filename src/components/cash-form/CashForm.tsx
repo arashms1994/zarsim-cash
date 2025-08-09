@@ -12,17 +12,23 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useUser } from "@/api/getData";
-import { addCashReceipt, updateCashReceipt } from "@/api/addData";
-import { useEffect, useState } from "react";
+import { addCashReceipt } from "@/api/addData";
 import { useQueryClient } from "@tanstack/react-query";
+import { BANK_ACCOUNTS } from "@/utils/constants";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const CashForm = () => {
   const { handleSubmit, control, watch, reset } = useFormContext();
   const feild = watch();
   const queryClient = useQueryClient();
-  console.log("watch", feild);
-
-  const [animate, setAnimate] = useState(false);
 
   const onSubmit = async (data: any) => {
     toast("واریز ثبت شد", {
@@ -46,37 +52,19 @@ const CashForm = () => {
       status: "0",
     };
     try {
-      if (feild.isUpdating) {
-        const res = await updateCashReceipt(sendData, feild.ID);
-        console.log("reeee", res);
-      } else {
-        await addCashReceipt(sendData);
-      }
-
+      await addCashReceipt(sendData);
       queryClient.invalidateQueries({ queryKey: ["cashListItems"] });
       reset();
     } catch (error) {
       console.log(error);
     }
-    // console.log("send Data", sendData);
   };
 
   const user = useUser();
   console.log(user);
-  useEffect(() => {
-    if (feild.isUpdating) {
-      setAnimate(true);
-      setTimeout(() => {
-        setAnimate(false);
-      }, 2000);
-    }
-  }, [feild.isUpdating]);
+
   return (
-    <div
-      className={`flex flex-col justify-center items-center gap-3 ${
-        animate ? "animate-[myAnim_1s_ease_0s_1_normal_forwards]" : ""
-      } `}
-    >
+    <div className="flex flex-col justify-center items-center gap-3">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-[450px] space-y-4 rounded-xl inset-shadow-xs p-6 bg-slate-50"
@@ -136,6 +124,37 @@ const CashForm = () => {
               <FormLabel>شماره مرجع:</FormLabel>
               <FormControl style={{ width: "230px" }}>
                 <Input placeholder="شماره مرجع" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="bank_account"
+          render={({ field }) => (
+            <FormItem
+              className="flex justify-between items-center w-full"
+              dir="rtl"
+            >
+              <FormLabel>شماره حساب:</FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-[230px]">
+                    <SelectValue placeholder="انتخاب شماره حساب" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>شماره‌های حساب</SelectLabel>
+                      {BANK_ACCOUNTS.map(({ value, id }) => (
+                        <SelectItem key={id} value={value}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>

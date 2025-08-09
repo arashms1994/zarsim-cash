@@ -1,23 +1,26 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TableUI } from "../ui/TableUI";
+import { useCashListItems } from "@/api/getData";
 
 export function CashHistoryTabs() {
+  const { data } = useCashListItems();
+
   return (
     <div className="flex w-full m-w-[700px] flex-col gap-6">
-      <Tabs defaultValue="confirmed">
+      <Tabs defaultValue="pending">
         <TabsList className="gap-2">
-          <TabsTrigger
-            value="confirmed"
-            className="bg-green-500 text-white font-medium"
-          >
-            تایید شده
-          </TabsTrigger>
-
           <TabsTrigger
             value="pending"
             className="bg-yellow-400 text-white font-medium"
           >
             در انتظار تایید
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="confirmed"
+            className="bg-green-500 text-white font-medium"
+          >
+            تایید شده
           </TabsTrigger>
 
           <TabsTrigger
@@ -35,20 +38,20 @@ export function CashHistoryTabs() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="confirmed">
-          <TableUI />
+        <TabsContent value="pending">
+          <TableUI data={data} />
         </TabsContent>
 
-        <TabsContent value="pending">
-          <TableUI />
+        <TabsContent value="confirmed">
+          <TableUI data={data} />
         </TabsContent>
 
         <TabsContent value="all">
-          <TableUI />
+          <TableUI data={data} />
         </TabsContent>
 
         <TabsContent value="rejected">
-          <TableUI />
+          <TableUI data={data} />
         </TabsContent>
       </Tabs>
     </div>

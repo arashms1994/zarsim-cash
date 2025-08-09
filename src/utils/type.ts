@@ -19,4 +19,9 @@ export interface ICashListItem {
   reference_number: string;
   status: string;
   customer_GUID: string;
+  bank_account:string
+}
+
+export interface ITableUIProps {
+  data: ICashListItem[] | undefined;
 }
