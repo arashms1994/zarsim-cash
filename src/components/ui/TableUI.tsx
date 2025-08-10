@@ -27,7 +27,6 @@ export function TableUI({
   backgroundColor = "bg-slate-200",
 }: ITableUIProps) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  // const { toast } = useToast();
 
   const handleDelete = async (id: number) => {
     try {
@@ -68,7 +67,7 @@ export function TableUI({
   return (
     <Dialog>
       <Table className="bg-slate-50" dir="rtl">
-        <TableCaption>لیست واریزی‌های شما</TableCaption>
+        <TableCaption>لیست واریزی‌های نقدی</TableCaption>
         <TableHeader>
           <TableRow
             className={`font-semibold text-xl text-slate-950 ${backgroundColor}`}
