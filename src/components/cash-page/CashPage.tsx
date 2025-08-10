@@ -1,3 +1,4 @@
+import { useState } from "react";
 import CashForm from "../cash-form/CashForm";
 import { CashHistoryTabs } from "../cash-tabs/CashHistoryTabs";
 import Guid from "@/utils/createGUID";
@@ -10,7 +11,7 @@ import { FormProvider, useForm } from "react-hook-form";
 const CashPage = () => {
   const [searchParams] = useSearchParams();
   const userGuid = searchParams.get("guid");
-  const itemGuid = Guid();
+  const [itemGuid, setItemGuid] = useState(Guid());
 
   const { data } = useCashListItems(userGuid || "");
 
@@ -27,16 +28,23 @@ const CashPage = () => {
     },
   });
 
-  if (!data || data.length === 0) {
-    return (
-      <div className="text-center text-gray-500">هیچ آیتمی وجود ندارد.</div>
-    );
-  }
+  const handleSuccessfulSubmit = () => {
+    setItemGuid(Guid());
+    form.reset({
+      Title: Guid(),
+      customer_GUID: userGuid || "",
+      count: "",
+      reference_number: "",
+      due_date: "",
+      bank_account: "",
+      isUpdating: false,
+    });
+  };
 
   return (
     <FormProvider {...form}>
-      <div className="w-full flex justify-between gap-3 items-center">
-        <CashForm userGuid={userGuid} />
+      <div className="w-full flex justify-between gap-3 items-start">
+        <CashForm userGuid={userGuid} onSuccessfulSubmit={handleSuccessfulSubmit} itemGuid={itemGuid}/>
         <CashHistoryTabs data={data} />
       </div>
     </FormProvider>

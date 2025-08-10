@@ -24,13 +24,18 @@ import {
   SelectValue,
 } from "../ui/select";
 import type { ICashFormProps } from "@/utils/type";
+import type { FormSchema } from "@/utils/validation";
 
-const CashForm = ({ userGuid }: ICashFormProps) => {
-  const { handleSubmit, control, watch, reset } = useFormContext();
+const CashForm = ({
+  userGuid,
+  onSuccessfulSubmit,
+  itemGuid,
+}: ICashFormProps) => {
+  const { handleSubmit, control, watch, reset } = useFormContext<FormSchema>();
   const feild = watch();
   const queryClient = useQueryClient();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FormSchema) => {
     toast("واریز ثبت شد", {
       description: (
         <pre className="mt-2 w-[320px] rounded-md bg-black text-white p-4 text-xs">
@@ -38,6 +43,7 @@ const CashForm = ({ userGuid }: ICashFormProps) => {
         </pre>
       ),
     });
+
     const sendData: {
       Title: string;
       count: string;
@@ -59,7 +65,7 @@ const CashForm = ({ userGuid }: ICashFormProps) => {
     try {
       await addCashReceipt(sendData);
       queryClient.invalidateQueries({ queryKey: ["cashListItems"] });
-      reset();
+      onSuccessfulSubmit();
     } catch (error) {
       console.log(error);
     }
@@ -165,7 +171,7 @@ const CashForm = ({ userGuid }: ICashFormProps) => {
 
         <div className="flex justify-between items-center w-full">
           <FormLabel>آپلود رسید واریز:</FormLabel>
-          <FileUploader orderNumber="52555" subFolder="55555" />
+          <FileUploader orderNumber={userGuid} subFolder={itemGuid} />
         </div>
 
         <div className="flex justify-center pt-2 w-full">
