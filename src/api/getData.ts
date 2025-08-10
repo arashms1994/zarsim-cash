@@ -69,6 +69,6 @@ export function useCashListItems() {
   return useQuery<ICashListItem[], Error>({
     queryKey: ["cashListItems"],
     queryFn: getAllCashListItems,
-    staleTime: 10000,
+    staleTime: 2000,
   });
 }

@@ -48,7 +48,7 @@ export function TableUI({ data }: ITableUIProps) {
       <Table className="bg-slate-50" dir="rtl">
         <TableCaption>لیست واریزی‌های شما</TableCaption>
         <TableHeader>
-          <TableRow>
+          <TableRow className="font-semibold bg-slate-200 text-xl text-slate-800">
             <TableHead className="text-right">تاریخ</TableHead>
             <TableHead className="text-right">مبلغ</TableHead>
             <TableHead className="text-right">شماره مرجع</TableHead>
@@ -58,7 +58,7 @@ export function TableUI({ data }: ITableUIProps) {
         </TableHeader>
         <TableBody>
           {data?.map((item) => (
-            <TableRow key={item.Title}>
+            <TableRow key={item.Title} className="font-medium text-base">
               <TableCell className="text-right">{item.due_date}</TableCell>
               <TableCell className="text-right">{item.count}</TableCell>
               <TableCell className="text-right">

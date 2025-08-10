@@ -1,9 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TableUI } from "../ui/TableUI";
-import { useCashListItems } from "@/api/getData";
+import type { ITableUIProps } from "@/utils/type";
 
-export function CashHistoryTabs() {
-  const { data } = useCashListItems();
+export function CashHistoryTabs({ data }: ITableUIProps) {
 
   return (
     <div className="flex w-full m-w-[700px] flex-col gap-6">
