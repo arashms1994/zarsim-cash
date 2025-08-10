@@ -43,6 +43,12 @@ export function TableUI({ data }: ITableUIProps) {
     }
   };
 
+  if (!data || data.length === 0) {
+    return (
+      <div className="text-center text-gray-500">هیچ آیتمی وجود ندارد.</div>
+    );
+  }
+
   return (
     <Dialog>
       <Table className="bg-slate-50" dir="rtl">

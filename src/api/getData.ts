@@ -23,13 +23,15 @@ export async function getCurrentUser(): Promise<string> {
   return data.d.LoginName;
 }
 
-export async function getAllCashListItems(): Promise<ICashListItem[]> {
+export async function getAllCashListItems(
+  userGuid: string
+): Promise<ICashListItem[]> {
   const listTitle = "Cash_List";
   let items: ICashListItem[] = [];
 
   let nextUrl:
     | string
-    | null = `${BASE_URL}/_api/web/lists/getbytitle('${listTitle}')/items?$top=100&$orderby=ID desc`;
+    | null = `${BASE_URL}/_api/web/lists/getbytitle('${listTitle}')/items?$top=100&$orderby=ID desc&$filter=customer_GUID eq '${userGuid}'`;
 
   while (nextUrl) {
     const res = await fetch(nextUrl, {
@@ -65,10 +67,11 @@ export function useUser() {
   });
 }
 
-export function useCashListItems() {
+export function useCashListItems(userGuid: string) {
   return useQuery<ICashListItem[], Error>({
-    queryKey: ["cashListItems"],
-    queryFn: getAllCashListItems,
+    queryKey: ["cashListItems", userGuid],
+    queryFn: () => getAllCashListItems(userGuid),
     staleTime: 2000,
+    enabled: !!userGuid,
   });
 }

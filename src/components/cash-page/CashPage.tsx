@@ -1,4 +1,3 @@
-import { FormProvider, useForm } from "react-hook-form";
 import CashForm from "../cash-form/CashForm";
 import { CashHistoryTabs } from "../cash-tabs/CashHistoryTabs";
 import Guid from "@/utils/createGUID";
@@ -6,13 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema } from "@/utils/validation";
 import { useCashListItems } from "@/api/getData";
 import { useSearchParams } from "react-router";
+import { FormProvider, useForm } from "react-hook-form";
 
 const CashPage = () => {
   const [searchParams] = useSearchParams();
   const userGuid = searchParams.get("guid");
   const itemGuid = Guid();
 
-  const { data } = useCashListItems();
+  const { data } = useCashListItems(userGuid || "");
 
   const form = useForm({
     resolver: zodResolver(FormSchema),

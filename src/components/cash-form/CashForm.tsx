@@ -11,7 +11,6 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { useUser } from "@/api/getData";
 import { addCashReceipt } from "@/api/addData";
 import { useQueryClient } from "@tanstack/react-query";
 import { BANK_ACCOUNTS } from "@/utils/constants";
@@ -54,7 +53,7 @@ const CashForm = ({ userGuid }: ICashFormProps) => {
       due_date: data.due_date,
       bank_account: data.bank_account,
       status: "0",
-      customer_GUID: userGuid,
+      customer_GUID: userGuid || "",
     };
 
     try {
@@ -65,9 +64,6 @@ const CashForm = ({ userGuid }: ICashFormProps) => {
       console.log(error);
     }
   };
-
-  const user = useUser();
-  console.log(user);
 
   return (
     <div className="flex flex-col justify-center items-center gap-3">

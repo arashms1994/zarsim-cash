@@ -85,24 +85,3 @@ export async function updateCashReceipt(
     }
   }
 }
-
-export async function deleteCashReceipt(ID: number) {
-  const digest = await getDigest();
-  const listName = "Cash_List";
-
-  const res = await fetch(
-    `${BASE_URL}/_api/web/lists/getbytitle('${listName}')/items(${ID})`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json;odata=verbose",
-        "Content-Type": "application/json;odata=verbose",
-        "X-RequestDigest": digest,
-        "X-HTTP-Method": "DELETE",
-        "IF-MATCH": "*",
-      },
-    }
-  );
-
-  if (!res.ok) throw new Error("حذف با خطا مواجه شد");
-}
