@@ -10,7 +10,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { toast } from "sonner";
 import { addCashReceipt } from "@/api/addData";
 import { useQueryClient } from "@tanstack/react-query";
 import { BANK_ACCOUNTS } from "@/utils/constants";
@@ -25,6 +24,7 @@ import {
 } from "../ui/select";
 import type { ICashFormProps } from "@/utils/type";
 import type { FormSchema } from "@/utils/validation";
+import { Bounce, toast } from "react-toastify";
 
 const CashForm = ({
   userGuid,
@@ -36,14 +36,6 @@ const CashForm = ({
   const queryClient = useQueryClient();
 
   const onSubmit = async (data: FormSchema) => {
-    toast("واریز ثبت شد", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-black text-white p-4 text-xs">
-          {JSON.stringify(data, null, 2)}
-        </pre>
-      ),
-    });
-
     const sendData: {
       Title: string;
       count: string;
@@ -66,8 +58,30 @@ const CashForm = ({
       await addCashReceipt(sendData);
       queryClient.invalidateQueries({ queryKey: ["cashListItems"] });
       onSuccessfulSubmit();
+      toast.success("آیتم با موفقیت ثبت شد.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error("خطا در اضافه کردن آیتم!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     }
   };
 

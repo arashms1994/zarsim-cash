@@ -20,25 +20,42 @@ import { Button } from "./button";
 import { Trash2 } from "lucide-react";
 import type { ITableUIProps } from "@/utils/type";
 import { deleteCashReceipt } from "@/api/deleteData";
+import { Bounce, toast } from "react-toastify";
 
-export function TableUI({ data, backgroundColor = "bg-slate-200" }: ITableUIProps) {
+export function TableUI({
+  data,
+  backgroundColor = "bg-slate-200",
+}: ITableUIProps) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   // const { toast } = useToast();
 
   const handleDelete = async (id: number) => {
     try {
       await deleteCashReceipt(id);
-      // toast({
-      //   title: "موفقیت",
-      //   description: "آیتم با موفقیت حذف شد.",
-      // });
+      toast.success("آیتم با موفقیت پاک شد.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     } catch (error) {
       console.error(error);
-      // toast({
-      //   title: "خطا",
-      //   description: error instanceof Error ? error.message : "خطا در حذف آیتم",
-      //   variant: "destructive",
-      // });
+      toast.error("خطا در پاک کردن آیتم!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     }
   };
 
@@ -53,7 +70,9 @@ export function TableUI({ data, backgroundColor = "bg-slate-200" }: ITableUIProp
       <Table className="bg-slate-50" dir="rtl">
         <TableCaption>لیست واریزی‌های شما</TableCaption>
         <TableHeader>
-          <TableRow className={`font-semibold text-xl text-slate-950 ${backgroundColor}`}>
+          <TableRow
+            className={`font-semibold text-xl text-slate-950 ${backgroundColor}`}
+          >
             <TableHead className="text-right">تاریخ</TableHead>
             <TableHead className="text-right">مبلغ</TableHead>
             <TableHead className="text-right">شماره مرجع</TableHead>

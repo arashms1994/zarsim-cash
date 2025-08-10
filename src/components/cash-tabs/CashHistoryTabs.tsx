@@ -55,9 +55,9 @@ export function CashHistoryTabs({ data }: ITableUIProps) {
 
           <TabsTrigger
             value="all"
-            className="bg-slate-200 text-white font-medium"
+            className="bg-slate-500 text-white font-medium"
           >
-            همه ی آیتم ها
+            همه ی واریزها
           </TabsTrigger>
         </TabsList>
 
