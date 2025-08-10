@@ -24,8 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import type { ICashFormProps } from "@/utils/type";
 
-const CashForm = () => {
+const CashForm = ({ userGuid }: ICashFormProps) => {
   const { handleSubmit, control, watch, reset } = useFormContext();
   const feild = watch();
   const queryClient = useQueryClient();
@@ -43,14 +44,19 @@ const CashForm = () => {
       count: string;
       reference_number: string;
       due_date: string;
+      bank_account: string;
       status: string;
+      customer_GUID: string;
     } = {
       Title: data.Title,
       count: data.count,
       reference_number: data.reference_number,
       due_date: data.due_date,
+      bank_account: data.bank_account,
       status: "0",
+      customer_GUID: userGuid,
     };
+
     try {
       await addCashReceipt(sendData);
       queryClient.invalidateQueries({ queryKey: ["cashListItems"] });

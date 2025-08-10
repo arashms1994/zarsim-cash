@@ -25,3 +25,7 @@ export interface ICashListItem {
 export interface ITableUIProps {
   data: ICashListItem[] | undefined;
 }
+
+export interface ICashFormProps {
+  userGuid: string | null;
+}
