@@ -20,10 +20,12 @@ export interface ICashListItem {
   status: string;
   customer_GUID: string;
   bank_account: string;
+  description: string;
 }
 
 export interface ITableUIProps {
   data: ICashListItem[] | undefined;
+  backgroundColor?: string;
 }
 
 export interface ICashFormProps {

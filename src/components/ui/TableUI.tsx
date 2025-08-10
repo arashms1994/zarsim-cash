@@ -20,9 +20,8 @@ import { Button } from "./button";
 import { Trash2 } from "lucide-react";
 import type { ITableUIProps } from "@/utils/type";
 import { deleteCashReceipt } from "@/api/deleteData";
-// import { useToast } from "@/components/ui/use-toast";
 
-export function TableUI({ data }: ITableUIProps) {
+export function TableUI({ data, backgroundColor = "bg-slate-200" }: ITableUIProps) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   // const { toast } = useToast();
 
@@ -54,11 +53,12 @@ export function TableUI({ data }: ITableUIProps) {
       <Table className="bg-slate-50" dir="rtl">
         <TableCaption>لیست واریزی‌های شما</TableCaption>
         <TableHeader>
-          <TableRow className="font-semibold bg-slate-200 text-xl text-slate-800">
+          <TableRow className={`font-semibold text-xl text-slate-950 ${backgroundColor}`}>
             <TableHead className="text-right">تاریخ</TableHead>
             <TableHead className="text-right">مبلغ</TableHead>
             <TableHead className="text-right">شماره مرجع</TableHead>
             <TableHead className="text-right">شماره حساب</TableHead>
+            <TableHead className="text-right">توضیحات</TableHead>
             <TableHead className="text-right">عملیات</TableHead>
           </TableRow>
         </TableHeader>
@@ -71,6 +71,9 @@ export function TableUI({ data }: ITableUIProps) {
                 {item.reference_number}
               </TableCell>
               <TableCell className="text-right">{item.bank_account}</TableCell>
+              <TableCell className="text-right">
+                {item.description || "توضیحاتی وجود ندارد."}
+              </TableCell>
               <TableCell className="text-right flex gap-2">
                 <DialogTrigger asChild onClick={() => setSelectedId(item.ID)}>
                   <button
