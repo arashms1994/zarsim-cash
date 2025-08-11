@@ -43,8 +43,12 @@ const CashPage = () => {
 
   return (
     <FormProvider {...form}>
-      <div className="w-full max-w-[1300px] flex justify-between gap-3 items-start">
-        <CashForm userGuid={userGuid} onSuccessfulSubmit={handleSuccessfulSubmit} itemGuid={itemGuid}/>
+      <div className="max-w-[1300px] flex justify-between gap-3 items-start">
+        <CashForm
+          userGuid={userGuid}
+          onSuccessfulSubmit={handleSuccessfulSubmit}
+          itemGuid={itemGuid}
+        />
         <CashHistoryTabs data={data} />
       </div>
     </FormProvider>
