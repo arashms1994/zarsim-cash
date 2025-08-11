@@ -46,7 +46,7 @@ const FileUploader = forwardRef<unknown, IFileUploaderProps>(
       const cleanDocType = docType?.replace(/[#%*<>?/\\|]/g, "_");
       const cleanFileName = selectedFile.name.replace(/[#%*<>?/\\|]/g, "_");
 
-      const libraryName = "LC_AttachFiles";
+      const libraryName = "Cash_AttachFiles";
       const folderParts = [libraryName, cleanOrderNumber, cleanSubFolder];
 
       if (cleanDocType) folderParts.push(cleanDocType);

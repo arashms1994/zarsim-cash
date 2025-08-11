@@ -25,12 +25,19 @@ import {
 import type { ICashFormProps } from "@/utils/type";
 import type { FormSchema } from "@/utils/validation";
 import { Bounce, toast } from "react-toastify";
+import { useRef } from "react";
 
 const CashForm = ({
   userGuid,
   onSuccessfulSubmit,
   itemGuid,
 }: ICashFormProps) => {
+  const uploaderRef = useRef<{
+    uploadFile: () => Promise<void>;
+    getFile: () => File | null;
+    clearFile: () => void;
+  }>(null);
+
   const { handleSubmit, control, watch, reset } = useFormContext<FormSchema>();
   const feild = watch();
   const queryClient = useQueryClient();
@@ -55,6 +62,10 @@ const CashForm = ({
     };
 
     try {
+      if (uploaderRef.current) {
+        await uploaderRef.current.uploadFile();
+      }
+
       await addCashReceipt(sendData);
       queryClient.invalidateQueries({ queryKey: ["cashListItems"] });
       onSuccessfulSubmit();
@@ -69,9 +80,13 @@ const CashForm = ({
         theme: "colored",
         transition: Bounce,
       });
+
+      if (uploaderRef.current) {
+        uploaderRef.current.clearFile();
+      }
     } catch (error) {
       console.error(error);
-      toast.error("خطا در اضافه کردن آیتم!", {
+      toast.error("خطا در اضافه کردن آیتم یا آپلود فایل!", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -185,7 +200,11 @@ const CashForm = ({
 
         <div className="flex justify-between items-center w-full">
           <FormLabel>آپلود رسید واریز:</FormLabel>
-          <FileUploader orderNumber={userGuid} subFolder={itemGuid} />
+          <FileUploader
+            ref={uploaderRef}
+            orderNumber={userGuid}
+            subFolder={itemGuid}
+          />
         </div>
 
         <div className="flex justify-center pt-2 w-full">
