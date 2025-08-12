@@ -1,27 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ICashListItem } from "@/utils/type";
+import type { ICashListItem, ICustomer } from "@/utils/type";
 import { BASE_URL } from "./base";
-
-declare const _spPageContextInfo: {
-  webAbsoluteUrl: string;
-};
-
-export async function getCurrentUser(): Promise<string> {
-  const response = await fetch(
-    `${_spPageContextInfo.webAbsoluteUrl}/_api/web/currentuser`,
-    {
-      headers: { Accept: "application/json;odata=verbose" },
-      credentials: "same-origin",
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-
-  const data = await response.json();
-  return data.d.LoginName;
-}
 
 export async function getAllCashListItems(
   userGuid: string
@@ -60,12 +39,39 @@ export async function getAllCashListItems(
   return items;
 }
 
-export function useUser() {
-  return useQuery<string, Error>({
-    queryKey: ["currentUser"],
-    queryFn: getCurrentUser,
+export async function getCustomer(userGuid: string): Promise<ICustomer> {
+  const listTitle = "customer_info";
+  const url = `${BASE_URL}/_api/web/lists/getbytitle('${listTitle}')/items?$filter=guid_form eq '${userGuid}'`;
+
+  const res = await fetch(url, {
+    headers: {
+      Accept: "application/json;odata=verbose",
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error("خطا در گرفتن آیتم‌های customer_info: " + err);
+  }
+
+  const json: { d: { results: ICustomer[] } } = await res.json();
+
+  const results = json.d?.results;
+  if (!Array.isArray(results) || results.length === 0) {
+    throw new Error("هیچ مشتری‌ای با این guid_form پیدا نشد");
+  }
+
+  return results[0];
+}
+
+export function useUser(userGuid: string) {
+  return useQuery<ICustomer, Error>({
+    queryKey: ["currentUser", userGuid],
+    queryFn: () => getCustomer(userGuid),
+    enabled: !!userGuid,
   });
 }
+
 
 export function useCashListItems(userGuid: string) {
   return useQuery<ICashListItem[], Error>({

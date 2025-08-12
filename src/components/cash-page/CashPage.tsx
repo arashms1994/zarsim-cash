@@ -4,7 +4,7 @@ import { CashHistoryTabs } from "../cash-tabs/CashHistoryTabs";
 import Guid from "@/utils/createGUID";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema } from "@/utils/validation";
-import { useCashListItems } from "@/api/getData";
+import { useCashListItems, useUser } from "@/api/getData";
 import { useSearchParams } from "react-router";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -12,6 +12,8 @@ const CashPage = () => {
   const [searchParams] = useSearchParams();
   const userGuid = searchParams.get("guid");
   const [itemGuid, setItemGuid] = useState(Guid());
+  const user = useUser(userGuid || "");
+  const userTitle = user.data?.Title;
 
   const { data } = useCashListItems(userGuid || "");
 
@@ -20,6 +22,7 @@ const CashPage = () => {
     defaultValues: {
       Title: itemGuid,
       customer_GUID: userGuid || "",
+      customer_title: userTitle || "",
       count: "",
       reference_number: "",
       due_date: "",
@@ -37,6 +40,7 @@ const CashPage = () => {
       reference_number: "",
       due_date: "",
       bank_account: "",
+      customer_title: "",
       isUpdating: false,
     });
   };
@@ -45,6 +49,7 @@ const CashPage = () => {
     <FormProvider {...form}>
       <div className="max-w-[1300px] flex justify-between gap-3 items-start">
         <CashForm
+          userTitle={userTitle ?? null}
           userGuid={userGuid}
           onSuccessfulSubmit={handleSuccessfulSubmit}
           itemGuid={itemGuid}

@@ -30,6 +30,12 @@ export interface ITableUIProps {
 
 export interface ICashFormProps {
   userGuid: string | null;
+  userTitle: string | null;
   itemGuid: string;
   onSuccessfulSubmit: () => void;
+}
+
+export interface ICustomer {
+  Title: string;
+  guid_form: string;
 }

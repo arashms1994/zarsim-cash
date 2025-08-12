@@ -7,6 +7,7 @@ export const FormSchema = z.object({
   due_date: z.string().min(1, "تاریخ واریز الزامی است."),
   bank_account: z.string().min(1, "شماره حساب الزامی است."),
   customer_GUID: z.string(),
+  customer_title: z.string(),
   isUpdating: z.boolean(),
 });
 

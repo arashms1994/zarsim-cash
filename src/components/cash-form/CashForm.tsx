@@ -29,6 +29,7 @@ import { useRef } from "react";
 
 const CashForm = ({
   userGuid,
+  userTitle,
   onSuccessfulSubmit,
   itemGuid,
 }: ICashFormProps) => {
@@ -51,6 +52,7 @@ const CashForm = ({
       bank_account: string;
       status: string;
       customer_GUID: string;
+      customer_title: string;
     } = {
       Title: data.Title,
       count: data.count,
@@ -59,6 +61,7 @@ const CashForm = ({
       bank_account: data.bank_account,
       status: "0",
       customer_GUID: userGuid || "",
+      customer_title: userTitle || "",
     };
 
     try {
