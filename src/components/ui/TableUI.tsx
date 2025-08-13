@@ -76,7 +76,7 @@ export function TableUI({
             <TableHead className="text-right">مبلغ</TableHead>
             <TableHead className="text-right">شماره مرجع</TableHead>
             <TableHead className="text-right">شماره حساب</TableHead>
-            <TableHead className="text-right">توضیحات</TableHead>
+            {/* <TableHead className="text-right">توضیحات</TableHead> */}
             <TableHead className="text-right">عملیات</TableHead>
           </TableRow>
         </TableHeader>
@@ -89,9 +89,9 @@ export function TableUI({
                 {item.reference_number}
               </TableCell>
               <TableCell className="text-right">{item.bank_account}</TableCell>
-              <TableCell className="text-right">
+              {/* <TableCell className="text-right">
                 {item.description || "توضیحاتی وجود ندارد."}
-              </TableCell>
+              </TableCell> */}
               <TableCell className="text-right flex gap-2">
                 <DialogTrigger asChild onClick={() => setSelectedId(item.ID)}>
                   <button
