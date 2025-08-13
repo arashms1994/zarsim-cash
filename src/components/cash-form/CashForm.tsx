@@ -54,7 +54,7 @@ const CashForm = ({
       customer_GUID: string;
       customer_title: string;
     } = {
-      Title: data.Title,
+      Title: itemGuid,
       count: data.count,
       reference_number: data.reference_number,
       due_date: data.due_date,

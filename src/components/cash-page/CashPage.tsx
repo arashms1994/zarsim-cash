@@ -34,7 +34,7 @@ const CashPage = () => {
   const handleSuccessfulSubmit = () => {
     setItemGuid(Guid());
     form.reset({
-      Title: Guid(),
+      Title: itemGuid,
       customer_GUID: userGuid || "",
       count: "",
       reference_number: "",
