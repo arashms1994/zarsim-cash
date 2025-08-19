@@ -2,7 +2,12 @@
   max-width: 1280px;
   margin: 0 auto;
   text-align: center;
+  font-family: system-ui;
 }
+body {
+  font-family: system-ui;
+}
+
 /* 
 #s4-workspace {
   overflow: unset;

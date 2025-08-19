@@ -21,6 +21,7 @@ import { Trash2 } from "lucide-react";
 import type { ITableUIProps } from "@/utils/type";
 import { deleteCashReceipt } from "@/api/deleteData";
 import { Bounce, toast } from "react-toastify";
+import { formatNumberWithComma } from "@/utils/formatNumberWithComma";
 
 export function TableUI({
   data,
@@ -84,7 +85,9 @@ export function TableUI({
           {data?.map((item) => (
             <TableRow key={item.Title} className="font-medium text-base">
               <TableCell className="text-right">{item.due_date}</TableCell>
-              <TableCell className="text-right">{item.count}</TableCell>
+              <TableCell className="text-right">
+                {formatNumberWithComma(item.count)}
+              </TableCell>
               <TableCell className="text-right">
                 {item.reference_number}
               </TableCell>
