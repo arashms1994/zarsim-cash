@@ -26,6 +26,7 @@ import { formatNumberWithComma } from "@/utils/formatNumberWithComma";
 export function TableUI({
   data,
   backgroundColor = "bg-slate-200",
+  showActions = false, // prop جدید
 }: ITableUIProps) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -77,8 +78,9 @@ export function TableUI({
             <TableHead className="text-right">مبلغ</TableHead>
             <TableHead className="text-right">شماره مرجع</TableHead>
             <TableHead className="text-right">شماره حساب</TableHead>
-            {/* <TableHead className="text-right">توضیحات</TableHead> */}
-            <TableHead className="text-right">عملیات</TableHead>
+            {showActions && (
+              <TableHead className="text-right">عملیات</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -92,24 +94,23 @@ export function TableUI({
                 {item.reference_number}
               </TableCell>
               <TableCell className="text-right">{item.bank_account}</TableCell>
-              {/* <TableCell className="text-right">
-                {item.description || "توضیحاتی وجود ندارد."}
-              </TableCell> */}
-              <TableCell className="text-right flex gap-2">
-                <DialogTrigger asChild onClick={() => setSelectedId(item.ID)}>
-                  <button
-                    className="hover:text-red-400 border-0 hover:bg-transparent"
-                    aria-label={`حذف آیتم ${item.Title}`}
-                  >
-                    <Trash2 />
-                  </button>
-                </DialogTrigger>
-              </TableCell>
+              {showActions && (
+                <TableCell className="text-right flex gap-2">
+                  <DialogTrigger asChild onClick={() => setSelectedId(item.ID)}>
+                    <button
+                      className="hover:text-red-400 border-0 hover:bg-transparent"
+                      aria-label={`حذف آیتم ${item.Title}`}
+                    >
+                      <Trash2 />
+                    </button>
+                  </DialogTrigger>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      {selectedId && (
+      {selectedId && showActions && (
         <DialogContent className="sm:max-w-md rounded-xl p-6 text-right">
           <DialogHeader className="space-y-4">
             <DialogTitle className="text-lg font-bold text-right p-3">

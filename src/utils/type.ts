@@ -26,6 +26,7 @@ export interface ICashListItem {
 export interface ITableUIProps {
   data: ICashListItem[] | undefined;
   backgroundColor?: string;
+  showActions?: boolean;
 }
 
 export interface ICashFormProps {

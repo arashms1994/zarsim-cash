@@ -38,21 +38,18 @@ export function CashHistoryTabs({ data }: ITableUIProps) {
           >
             در انتظار تایید
           </TabsTrigger>
-
           <TabsTrigger
             value="confirmed"
             className="bg-green-500 text-white font-medium"
           >
             تایید شده
           </TabsTrigger>
-
           <TabsTrigger
             value="rejected"
             className="bg-red-500 text-white font-medium"
           >
             رد شده
           </TabsTrigger>
-
           <TabsTrigger
             value="all"
             className="bg-slate-500 text-white font-medium"
@@ -65,6 +62,7 @@ export function CashHistoryTabs({ data }: ITableUIProps) {
           <TableUI
             data={pendingItems}
             backgroundColor={getBackgroundColor("pending")}
+            showActions={true}
           />
         </TabsContent>
 
@@ -72,6 +70,7 @@ export function CashHistoryTabs({ data }: ITableUIProps) {
           <TableUI
             data={confirmedItems}
             backgroundColor={getBackgroundColor("confirmed")}
+            showActions={false}
           />
         </TabsContent>
 
@@ -79,6 +78,7 @@ export function CashHistoryTabs({ data }: ITableUIProps) {
           <TableUI
             data={rejectedItems}
             backgroundColor={getBackgroundColor("rejected")}
+            showActions={false}
           />
         </TabsContent>
 
@@ -86,6 +86,7 @@ export function CashHistoryTabs({ data }: ITableUIProps) {
           <TableUI
             data={allItems}
             backgroundColor={getBackgroundColor("all")}
+            showActions={false}
           />
         </TabsContent>
       </Tabs>
